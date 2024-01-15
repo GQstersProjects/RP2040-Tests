@@ -1,0 +1,2 @@
+Tested to print in Cura 4.6 with 0.4mm nozzle. Print slow! I also recommend a direct drive hot end.
+If you can't get the default track to print, you may try the thickboi variation, though it doesn't perform as well. 

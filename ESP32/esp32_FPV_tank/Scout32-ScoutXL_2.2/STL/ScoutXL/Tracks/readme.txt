@@ -1,0 +1,2 @@
+I now recommend the "snow" variation of tracks. They are less prone to binding up with debris, and are more flexible,
+freeing up drag from the drivetrain. Tested to print in Cura 4.6 with 0.4mm nozzle. Print slow! I also recommend a direct drive hot end. 

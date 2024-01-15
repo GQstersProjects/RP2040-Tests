@@ -1,0 +1,11 @@
+This release offers a few very important key updates.
+
+-Improved Reliability
+	The reliability of the signal is greatly improved by changing the channel behavior from
+	40mhz channels to 20mhz channels. This results in far less interference.
+	A watchdog is also implemented to prevent runaways from signal loss.
+	
+- Improved Cab
+	Cab was slightly thickened at the front to prevent cracks, and a slot was added to 
+	allow wiring the ESP32 prior to installation. This makes assembly MUCH easier as
+	you can slide the ESP32 AND wiring in and out of the cab with ease.
