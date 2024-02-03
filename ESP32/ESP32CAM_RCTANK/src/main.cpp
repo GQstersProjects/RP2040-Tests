@@ -5,6 +5,10 @@
 const char* ssid = "altoidTank"; //AP Name or Router SSID
 const char *password = "altoidTank"; //Password. Leave blank for open network. 
 
+//AP Settings
+int channel = 1; // Channel for AP Mode
+int hidden = 0; // Probably leave at zero
+int maxconnection = 1; // Only allow one at a time
 
 
 #include "esp_wifi.h"
@@ -202,12 +206,11 @@ void setup()
   } else {
     Serial.println("");
     Serial.println("WiFi disconnected");      
+    WiFi.softAP(ssid,password,channel,hidden,maxconnection);
     Serial.print("Camera Ready! Use 'http://");
     Serial.print(WiFi.softAPIP());
     Serial.println("' to connect");
-    char* apssid = "ESP32-CAM";
-    char* appassword = "12345678";         //AP password require at least 8 characters.
-    WiFi.softAP((WiFi.softAPIP().toString()+"_"+(String)apssid).c_str(), appassword);    
+    esp_wifi_set_bandwidth(WIFI_IF_AP, WIFI_BW_HT20); //Possible Fix for Interference??
   }
 
   for (int i=0;i<5;i++) 
