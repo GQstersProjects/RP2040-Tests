@@ -14,9 +14,9 @@ bool ap = 1;
 // const char* hostname = "slower than yo momma"; //For access via Hostname
 // const char* password = "its on the fridge"; //Password. Leave blank for open network. 
 
-const char* ssid = "Scout32"; //AP Name or Router SSID
-const char* hostname = "Scout32"; //For access via Hostname
-const char* password = ""; //Password. Leave blank for open network. 
+const char* ssid = "altoidTank"; //AP Name or Router SSID
+const char* hostname = "altoidTank"; //For access via Hostname
+const char *password = "altoidTank"; //Password. Leave blank for open network. 
 
 //AP Settings
 int channel = 1; // Channel for AP Mode
@@ -130,7 +130,7 @@ void setup()
   // Connect to Router
   Serial.println("ssid: " + (String)ssid);
   Serial.println("password: " + (String)password);
-  Serial.println("WiFi is Client Scout32");
+  Serial.println("WiFi is Client altoidTank");
   WiFi.mode(WIFI_STA);
   WiFi.setHostname(hostname);
   WiFi.begin(ssid, password);
@@ -145,7 +145,7 @@ void setup()
   // Setup Access Point
   Serial.println("ssid: " + (String)ssid);
   Serial.println("password: " + (String)password);
-  Serial.println("WiFi is Standalone Scout32");
+  Serial.println("WiFi is Standalone altoidTank");
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid,password,channel,hidden,maxconnection);
   Serial.print("Camera Ready! Use 'http://");
