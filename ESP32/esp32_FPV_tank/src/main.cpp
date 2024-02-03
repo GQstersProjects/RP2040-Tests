@@ -9,14 +9,14 @@ Version 2.2 - Should compile with ESP32 Boards Library 1.0.6+
 // Set ap to 1 to use Scout32 as Standalone Access Point with default IP 192.168.4.1
 // Set ap to 0 to connect to a router using DHCP with hostname espressif
 bool ap = 1; 
-
-// const char* ssid = "slower than yo momma"; //AP Name or Router SSID
-// const char* hostname = "slower than yo momma"; //For access via Hostname
-// const char* password = "its on the fridge"; //Password. Leave blank for open network. 
-
 const char* ssid = "altoidTank"; //AP Name or Router SSID
-const char* hostname = "altoidTank"; //For access via Hostname
 const char *password = "altoidTank"; //Password. Leave blank for open network. 
+
+// bool ap = 0; // Set to 0 to connect to a router using DHCP with hostname espressif
+// const char* ssid = "slower than yo momma";
+// const char* password = "its on the fridge";
+
+const char* hostname = "altoidTank"; //For access via Hostname
 
 //AP Settings
 int channel = 1; // Channel for AP Mode
@@ -70,6 +70,8 @@ void setup()
   Serial.begin(115200);
   Serial.setDebugOutput(true);
   Serial.println();
+
+  Serial.println("Setting up the altoidTank!");
 
 
 // Camera Configuration - Again, don't touch.
