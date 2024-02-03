@@ -7,6 +7,11 @@ Version 2.2 - Should compile with ESP32 Boards Library 1.0.6+
 // Set ap to 1 to use Scout32 as Standalone Access Point with default IP 192.168.4.1
 // Set ap to 0 to connect to a router using DHCP with hostname espressif
 bool ap = 1; 
+
+// const char* ssid = "slower than yo momma"; //AP Name or Router SSID
+// const char* hostname = "slower than yo momma"; //For access via Hostname
+// const char* password = "its on the fridge"; //Password. Leave blank for open network. 
+
 const char* ssid = "Scout32"; //AP Name or Router SSID
 const char* hostname = "Scout32"; //For access via Hostname
 const char* password = ""; //Password. Leave blank for open network. 
