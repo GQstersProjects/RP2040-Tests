@@ -321,6 +321,7 @@ static esp_err_t status_handler(httpd_req_t *req){
 // Front End / GUI Webpage
 static const char PROGMEM INDEX_HTML[] = R"rawliteral(
 <!DOCTYPE html>
+<!--
 <html>
 <head>
 <meta charset="utf-8">
@@ -508,6 +509,116 @@ body, html {
 </script>
 
 </body>
+</html>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Original HTML just to get it working-->
+
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=400px,user-scalable=no">
+        <title>PilotHobbies Scout32 Control</title>
+        <style>
+          body{width:100%;padding:0;margin:0;overflow-x:hidden;line-height:0;font-family:sans-serif;background:#FFF;color:#000;font-size:14px}
+      section table{width:400px;margin:auto;padding:0;}
+      section img{width:400px;margin:auto;display:block;padding:0;}
+      figure{margin:0;padding:0;}
+      tr{margin:0;}
+      button{display:block;width:128px;height:64px;margin:2px 0;border:0;color:#fff;background:#734CA7;border-radius:8px;outline:0}
+      button{background:linear-gradient(to bottom,#856fa5 0%,#734ca7 50%,#673ba5 51%,#7f63a5 100%);box-shadow:0 2px 1px #15052D;}
+      button{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;user-select:none;}
+      button.lr{height:136px;}
+      input[type=range]{-webkit-appearance:none;width:100%;height:24px;background:#363636;margin:2px 0;}
+      input[type=range]:focus{outline:0}input[type=range]::-webkit-slider-runnable-track{width:100%;height:4px;cursor:pointer;background:#EFEFEF;border-radius:0;border:0 solid #EFEFEF}
+      input[type=range]::-webkit-slider-thumb{border:1px solid rgba(0,0,30,0);height:32px;width:32px;border-radius:50px;background:#734CA7;cursor:pointer;-webkit-appearance:none;margin-top:-14px}
+      input[type=range]:focus::-webkit-slider-runnable-track{background:#EFEFEF}
+      input[type=range]::-moz-range-track{width:100%;height:4px;background:#EFEFEF;border-radius:0;border:0 solid #EFEFEF}
+      input[type=range]::-moz-range-thumb{border:1px solid rgba(0,0,30,0);height:32px;width:32px;border-radius:50px;background:#734CA7;cursor:pointer}
+        </style>
+    </head>
+
+    <body>
+       <section id="main">
+     <figure>
+      <div id="stream-container" class="image-container">
+      <img style="transform:rotate(270deg);" width="300px" height="400px" id="stream" src="">
+      </div>
+    </figure>
+      <section id="buttons">
+        <table>
+        <tr><td align="center"><button id="forward" onpointerdown="document.dispatchEvent(fwdpress);" onpointerup="document.dispatchEvent(fwdrelease);" onpointerleave="document.dispatchEvent(fwdrelease);">Forward</button></td><td align="center" rowspan="2"><button class="lr" id="turnleft" onpointerdown="document.dispatchEvent(leftpress);" onpointerup="document.dispatchEvent(leftrelease);" onpointerleave="document.dispatchEvent(leftrelease);">Left</button></td><td align="center" rowspan="2"><button class="lr" id="turnright" onpointerdown="document.dispatchEvent(rightpress);" onpointerup="document.dispatchEvent(rightrelease);" onpointerleave="document.dispatchEvent(rightrelease);">Right</button></td></tr>
+        <tr><td align="center"><button id="backward"  onpointerdown="document.dispatchEvent(backpress);" onpointerup="document.dispatchEvent(backrelease);" onpointerleave="document.dispatchEvent(backrelease);">Backward</button></td></tr>
+        <tr><td align="center">Speed</td><td align="center" colspan="2"><input type="range" id="speed" min="0" max="8" value="8" onchange="try{fetch(document.location.origin+'/control?var=speed&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Trim</td><td align="center" colspan="2"><input type="range" id="speed" min="-32" max="32" value="0" onchange="try{fetch(document.location.origin+'/control?var=trim&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Lights</td><td align="center" colspan="2"><input type="range" id="flash" min="0" max="255" value="10" onchange="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Quality</td><td align="center" colspan="2"><input type="range" id="quality" min="10" max="63" value="10" onchange="try{fetch(document.location.origin+'/control?var=quality&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Resolution</td><td align="center" colspan="2"><input type="range" id="framesize" min="0" max="6" value="5" onchange="try{fetch(document.location.origin+'/control?var=framesize&val='+this.value);}catch(e){}"></td></tr>
+        </table>
+      </section>         
+    </section>
+    <script>  
+   // Functions to control streaming
+  var source = document.getElementById('stream');
+  source.src = document.location.origin+':81/stream';
+  // Functions for Controls via Keypress
+  var keyforward=0;
+    var keybackward=0; 
+    var keyleft=0 ;
+    var keyright=0;
+  // Emulate Keypress with Touch
+  var fwdpress = new KeyboardEvent('keydown', {'keyCode':38, 'which':38});
+  var fwdrelease = new KeyboardEvent('keyup', {'keyCode':38, 'which':38});
+  var backpress = new KeyboardEvent('keydown', {'keyCode':40, 'which':40});
+  var backrelease = new KeyboardEvent('keyup', {'keyCode':40, 'which':40});
+  var leftpress = new KeyboardEvent('keydown', {'keyCode':37, 'which':37});
+  var leftrelease = new KeyboardEvent('keyup', {'keyCode':37, 'which':37});
+  var rightpress = new KeyboardEvent('keydown', {'keyCode':39, 'which':39});
+  var rightrelease = new KeyboardEvent('keyup', {'keyCode':39, 'which':39});
+  //Keypress Events
+   document.addEventListener('keydown',function(keyon){
+    keyon.preventDefault();
+      if ((keyon.keyCode == '38') && (!keybackward) && (!keyforward)) {keyforward = 1;}
+      else if ((keyon.keyCode == '40') && (!keyforward) && (!keybackward)){keybackward = 1;}
+      else if ((keyon.keyCode == '37') && (!keyright) && (!keyleft)){keyleft = 1;}
+      else if ((keyon.keyCode == '39') && (!keyleft) && (!keyright)){keyright = 1;}
+    });
+    //KeyRelease Events
+    document.addEventListener('keyup',function(keyoff){
+      if ((keyoff.keyCode == '38') || (keyoff.keyCode == '40')) {keyforward = 0;keybackward = 0;}
+      else if ((keyoff.keyCode == '37') || (keyoff.keyCode == '39')) {keyleft = 0;keyright = 0;}
+    });
+    //Send Commands to Scout
+    var currentcommand=0;
+    var oldcommand=0;
+    window.setInterval(function(){
+      if (((keyforward) && (keyleft)) || ((keybackward) && (keyleft)) || (keyleft)) {currentcommand = 3;} // Turn Left
+      else if (((keyforward) && (keyright)) || ((keybackward) && (keyright)) || (keyright)) {currentcommand = 4;} // Turn Right
+      else if (keyforward) {currentcommand = 1;} //Set Direction Forward
+      else if (keybackward) {currentcommand = 2;} // Set Direction Backward
+      else {currentcommand = 5;} // Stop
+      if (currentcommand != oldcommand){
+        fetch(document.location.origin+'/control?var=car&val='+currentcommand);
+        oldcommand = currentcommand;}
+    }, 100);
+    </script>
+    </body>
 </html>
 
 
