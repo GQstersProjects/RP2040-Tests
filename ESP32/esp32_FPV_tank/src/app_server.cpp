@@ -320,41 +320,114 @@ static esp_err_t status_handler(httpd_req_t *req){
 
 // Front End / GUI Webpage
 static const char PROGMEM INDEX_HTML[] = R"rawliteral(
-<!doctype html>
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=400px,user-scalable=no">
-        <title>PilotHobbies Scout32 Control</title>
-        <style>
-            body{width:100%;padding:0;margin:0;overflow-x:hidden;line-height:0;font-family:sans-serif;background:#FFF;color:#000;font-size:14px}
-            section table{width:400px;margin:auto;padding:0;}
-            section img{width:400px;margin:auto;display:block;padding:0;}
-            figure{margin:0;padding:0;}
-            tr{margin:0;}
-            button{display:block;width:128px;height:64px;margin:2px 0;border:0;color:#fff;background:#734CA7;border-radius:8px;outline:0}
-            button{background:linear-gradient(to bottom,#856fa5 0%,#734ca7 50%,#673ba5 51%,#7f63a5 100%);box-shadow:0 2px 1px #15052D;}
-            button{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;user-select:none;}
-            button.lr{height:136px;}
-            input[type=range]{-webkit-appearance:none;width:100%;height:24px;background:#363636;margin:2px 0;}
-            input[type=range]:focus{outline:0}input[type=range]::-webkit-slider-runnable-track{width:100%;height:4px;cursor:pointer;background:#EFEFEF;border-radius:0;border:0 solid #EFEFEF}
-            input[type=range]::-webkit-slider-thumb{border:1px solid rgba(0,0,30,0);height:32px;width:32px;border-radius:50px;background:#734CA7;cursor:pointer;-webkit-appearance:none;margin-top:-14px}
-            input[type=range]:focus::-webkit-slider-runnable-track{background:#EFEFEF}
-            input[type=range]::-moz-range-track{width:100%;height:4px;background:#EFEFEF;border-radius:0;border:0 solid #EFEFEF}
-            input[type=range]::-moz-range-thumb{border:1px solid rgba(0,0,30,0);height:32px;width:32px;border-radius:50px;background:#734CA7;cursor:pointer}
-        </style>
-    </head>
-    <body>
-        <section id="main">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESP32 Tank!</title>
+<style>
+body {font-family: Arial;
+background: #006666;
+}
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #009999;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #cc66ff;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #cc99ff;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  -webkit-animation: fadeEffect 1s;
+  animation: fadeEffect 1s;
+}
+
+/* Fade in tabs */
+@-webkit-keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+</style>
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Viewer')" id="defaultOpen">Viewer</button>
+  <button class="tablinks" onclick="openCity(event, 'Settings')">Settings</button>
+</div>
+
+<div id="Viewer" class="tabcontent">
+<section id="mainViewer">
             <figure>
                 <div id="stream-container" class="image-container">
                     <img width="400px" height="400px" id="stream" src="" style="transform: rotate(270deg);">
                 </div>
             </figure>
+
+        </section>
+
+
+
+</div>
+
+
+
+<div id="Settings" class="tabcontent">
+<section id="mainSettings">
+            <figure>
+            </figure>
             <section id="buttons">
                 <table>
-                    <tr><td align="center"><button id="forward" onpointerdown="document.dispatchEvent(fwdpress);" onpointerup="document.dispatchEvent(fwdrelease);" onpointerleave="document.dispatchEvent(fwdrelease);">Forward</button></td><td align="center" rowspan="2"><button class="lr" id="turnleft" onpointerdown="document.dispatchEvent(leftpress);" onpointerup="document.dispatchEvent(leftrelease);" onpointerleave="document.dispatchEvent(leftrelease);">Left</button></td><td align="center" rowspan="2"><button class="lr" id="turnright" onpointerdown="document.dispatchEvent(rightpress);" onpointerup="document.dispatchEvent(rightrelease);" onpointerleave="document.dispatchEvent(rightrelease);">Right</button></td></tr>
-                    <tr><td align="center"><button id="backward"  onpointerdown="document.dispatchEvent(backpress);" onpointerup="document.dispatchEvent(backrelease);" onpointerleave="document.dispatchEvent(backrelease);">Backward</button></td></tr>
+                    <tr><td align="center">
                     <tr><td align="center">Speed</td><td align="center" colspan="2"><input type="range" id="speed" min="0" max="8" value="8" onchange="try{fetch(document.location.origin+'/control?var=speed&val='+this.value);}catch(e){}"></td></tr>
                     <tr><td align="center">Left Trim</td><td align="center" colspan="2"><input type="range" id="ltrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=ltrim&val='+this.value);}catch(e){}"></td></tr>
                     <tr><td align="center">Right Trim</td><td align="center" colspan="2"><input type="range" id="rtrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=rtrim&val='+this.value);}catch(e){}"></td></tr>
@@ -365,8 +438,41 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
                 </table>
             </section>
         </section>
-        
-        <script>
+</div>
+
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Functions to control streaming
 
             var source = document.getElementById('stream');
@@ -422,8 +528,10 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
                 else {commandcounter++;} //Increment non-send command counter.
                 }, 100);    
         </script>
-    </body>
-</html>
+   
+</body>
+</html> 
+
 )rawliteral";
 
 static esp_err_t index_handler(httpd_req_t *req){
