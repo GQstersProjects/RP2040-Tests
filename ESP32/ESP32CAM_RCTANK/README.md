@@ -1,1 +1,0 @@
-https://github.com/PepeTheFroggie/ESP32CAM_RCTANK/blob/master/README.md
