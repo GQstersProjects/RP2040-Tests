@@ -327,68 +327,67 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ESP32 Tank!</title>
 <style>
-body {font-family: Arial;
-background: #006666;
+body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    background: #006666;
 }
+
 /* Style the tab */
 .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #009999;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #009999;
 }
 
 /* Style the buttons inside the tab */
 .tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #cc66ff;
+    background-color: #cc66ff;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #cc99ff;
+    background-color: #cc99ff;
 }
 
 /* Style the tab content */
 .tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-  -webkit-animation: fadeEffect 1s;
-  animation: fadeEffect 1s;
+    display: none;
+    padding: 0; /* Adjusted padding to 0 */
+    border: 1px solid #ccc;
+    border-top: none;
+    height: 100%; /* Adjust height as needed */
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s;
+    box-sizing: border-box; /* Include padding within height calculation */
 }
 
 /* Fade in tabs */
 @-webkit-keyframes fadeEffect {
-  from {opacity: 0;}
-  to {opacity: 1;}
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
 @keyframes fadeEffect {
-  from {opacity: 0;}
-  to {opacity: 1;}
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
-#stream-container {
-  width: 100%;
-  height: 100%;
-}
-
-#stream {
-  width: 100%;
-  height: 100%;
-}
 
 </style>
 </head>
@@ -414,15 +413,15 @@ background: #006666;
     <figure>
     </figure>
     <section id="buttons">
-    <table>
-      <tr><td align="center">
-      <tr><td align="center">Speed</td><td align="center" colspan="2"><input type="range" id="speed" min="0" max="8" value="8" onchange="try{fetch(document.location.origin+'/control?var=speed&val='+this.value);}catch(e){}"></td></tr>
-      <tr><td align="center">Left Trim</td><td align="center" colspan="2"><input type="range" id="ltrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=ltrim&val='+this.value);}catch(e){}"></td></tr>
-      <tr><td align="center">Right Trim</td><td align="center" colspan="2"><input type="range" id="rtrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=rtrim&val='+this.value);}catch(e){}"></td></tr>
-      <tr><td align="center">Lights</td><td align="center" colspan="2"><input type="range" id="flash" min="0" max="255" value="0" onchange="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"></td></tr>
-      <tr><td align="center">Quality</td><td align="center" colspan="2"><input type="range" id="quality" min="10" max="63" value="10" onchange="try{fetch(document.location.origin+'/control?var=quality&val='+this.value);}catch(e){}"></td></tr>
-      <tr><td align="center">Resolution</td><td align="center" colspan="2"><input type="range" id="framesize" min="0" max="6" value="5" onchange="try{fetch(document.location.origin+'/control?var=framesize&val='+this.value);}catch(e){}"></td></tr>
-      <tr><td align="center">Rotation</td><td align="center" colspan="2"><input type="button" value="Rotate Cam" id="rotate" onclick="rotateImg()"></td></tr>
+      <table>
+        <tr><td align="center">
+        <tr><td align="center">Speed</td><td align="center" colspan="2"><input type="range" id="speed" min="0" max="8" value="8" onchange="try{fetch(document.location.origin+'/control?var=speed&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Left Trim</td><td align="center" colspan="2"><input type="range" id="ltrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=ltrim&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Right Trim</td><td align="center" colspan="2"><input type="range" id="rtrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=rtrim&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Lights</td><td align="center" colspan="2"><input type="range" id="flash" min="0" max="255" value="0" onchange="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Quality</td><td align="center" colspan="2"><input type="range" id="quality" min="10" max="63" value="10" onchange="try{fetch(document.location.origin+'/control?var=quality&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Resolution</td><td align="center" colspan="2"><input type="range" id="framesize" min="0" max="6" value="5" onchange="try{fetch(document.location.origin+'/control?var=framesize&val='+this.value);}catch(e){}"></td></tr>
+        <tr><td align="center">Rotation</td><td align="center" colspan="2"><input type="button" value="Rotate Cam" id="rotate" onclick="rotateImg()"></td></tr>
     </table>
     </section>
   </section>
@@ -430,88 +429,82 @@ background: #006666;
 
 
 <script>
-function openCity(evt, cityName) {
+  // Function for the tabs
+  function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
+      tabcontent[i].style.display = "none";
   }
   tablinks = document.getElementsByClassName("tablinks");
   for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
-}
+  }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
 
-// Adjust video container size to fill the screen
-function adjustVideoSize() {
-  var streamContainer = document.getElementById("stream-container");
-  streamContainer.style.width = window.innerWidth + "px";
-  streamContainer.style.height = window.innerHeight + "px";
-}
 
-// Call adjustVideoSize initially and on window resize
-window.onload = adjustVideoSize;
-window.onresize = adjustVideoSize;
 
-// Functions to control streaming and other functionality
 
-            var source = document.getElementById('stream');
-            source.src = document.location.origin+':81/stream';
-            //Camera Rotation Fix
-            var rotation = 0;
-            function rotateImg() {
-                rotation += 90;
-                if (rotation === 360) {rotation = 0;}
-                document.querySelector("#stream").style.transform = `rotate(${rotation}deg)`;
-            }
-            // Functions for Controls via Keypress
-            var keyforward=0;
-            var keybackward=0; 
-            var keyleft=0 ;
-            var keyright=0;
-            // Emulate Keypress with Touch
-            var fwdpress = new KeyboardEvent('keydown', {'keyCode':38, 'which':38});
-            var fwdrelease = new KeyboardEvent('keyup', {'keyCode':38, 'which':38});
-            var backpress = new KeyboardEvent('keydown', {'keyCode':40, 'which':40});
-            var backrelease = new KeyboardEvent('keyup', {'keyCode':40, 'which':40});
-            var leftpress = new KeyboardEvent('keydown', {'keyCode':37, 'which':37});
-            var leftrelease = new KeyboardEvent('keyup', {'keyCode':37, 'which':37});
-            var rightpress = new KeyboardEvent('keydown', {'keyCode':39, 'which':39});
-            var rightrelease = new KeyboardEvent('keyup', {'keyCode':39, 'which':39});
-            //Keypress Events
-            document.addEventListener('keydown',function(keyon){
-                keyon.preventDefault();
-                if ((keyon.keyCode == '38') && (!keybackward) && (!keyforward)) {keyforward = 1;}
-                else if ((keyon.keyCode == '40') && (!keyforward) && (!keybackward)){keybackward = 1;}
-                else if ((keyon.keyCode == '37') && (!keyright) && (!keyleft)){keyleft = 1;}
-                else if ((keyon.keyCode == '39') && (!keyleft) && (!keyright)){keyright = 1;}
-                });
-                //KeyRelease Events
-                document.addEventListener('keyup',function(keyoff){
-                if ((keyoff.keyCode == '38') || (keyoff.keyCode == '40')) {keyforward = 0;keybackward = 0;}
-                else if ((keyoff.keyCode == '37') || (keyoff.keyCode == '39')) {keyleft = 0;keyright = 0;}
-                });
-                //Send Commands to Scout
-                var currentcommand=0;
-                var oldcommand=0;
-                var commandcounter=0;
-                window.setInterval(function(){
-                if (((keyforward) && (keyleft)) || ((keybackward) && (keyleft)) || (keyleft)) {currentcommand = 3;} // Turn Left
-                else if (((keyforward) && (keyright)) || ((keybackward) && (keyright)) || (keyright)) {currentcommand = 4;} // Turn Right
-                else if (keyforward) {currentcommand = 1;} //Set Direction Forward
-                else if (keybackward) {currentcommand = 2;} // Set Direction Backward
-                else {currentcommand = 5;} // Stop
-                if ((currentcommand != oldcommand) || (commandcounter > 30)){ // Limit commands to only send on new input or 3 second interval.
-                    try{fetch(document.location.origin+'/control?var=car&val='+currentcommand);}catch(e){} // Send the command for controls. 
-                    oldcommand = currentcommand;
-                    commandcounter = 0;}
-                else {commandcounter++;} //Increment non-send command counter.
-                }, 100);    
+  // Functions to control streaming
+
+  var source = document.getElementById('stream');
+  source.src = document.location.origin+':81/stream';
+  //Camera Rotation Fix
+  var rotation = 0;
+  function rotateImg() {
+      rotation += 90;
+      if (rotation === 360) {rotation = 0;}
+      document.querySelector("#stream").style.transform = `rotate(${rotation}deg)`;
+  }
+  // Functions for Controls via Keypress
+  var keyforward=0;
+  var keybackward=0; 
+  var keyleft=0 ;
+  var keyright=0;
+  // Emulate Keypress with Touch
+  var fwdpress = new KeyboardEvent('keydown', {'keyCode':38, 'which':38});
+  var fwdrelease = new KeyboardEvent('keyup', {'keyCode':38, 'which':38});
+  var backpress = new KeyboardEvent('keydown', {'keyCode':40, 'which':40});
+  var backrelease = new KeyboardEvent('keyup', {'keyCode':40, 'which':40});
+  var leftpress = new KeyboardEvent('keydown', {'keyCode':37, 'which':37});
+  var leftrelease = new KeyboardEvent('keyup', {'keyCode':37, 'which':37});
+  var rightpress = new KeyboardEvent('keydown', {'keyCode':39, 'which':39});
+  var rightrelease = new KeyboardEvent('keyup', {'keyCode':39, 'which':39});
+
+  //Keypress Events
+  document.addEventListener('keydown',function(keyon){
+      keyon.preventDefault();
+      if ((keyon.keyCode == '38') && (!keybackward) && (!keyforward)) {keyforward = 1;}
+      else if ((keyon.keyCode == '40') && (!keyforward) && (!keybackward)){keybackward = 1;}
+      else if ((keyon.keyCode == '37') && (!keyright) && (!keyleft)){keyleft = 1;}
+      else if ((keyon.keyCode == '39') && (!keyleft) && (!keyright)){keyright = 1;}
+      });
+      //KeyRelease Events
+      document.addEventListener('keyup',function(keyoff){
+      if ((keyoff.keyCode == '38') || (keyoff.keyCode == '40')) {keyforward = 0;keybackward = 0;}
+      else if ((keyoff.keyCode == '37') || (keyoff.keyCode == '39')) {keyleft = 0;keyright = 0;}
+      });
+      //Send Commands to Scout
+      var currentcommand=0;
+      var oldcommand=0;
+      var commandcounter=0;
+      window.setInterval(function(){
+      if (((keyforward) && (keyleft)) || ((keybackward) && (keyleft)) || (keyleft)) {currentcommand = 3;} // Turn Left
+      else if (((keyforward) && (keyright)) || ((keybackward) && (keyright)) || (keyright)) {currentcommand = 4;} // Turn Right
+      else if (keyforward) {currentcommand = 1;} //Set Direction Forward
+      else if (keybackward) {currentcommand = 2;} // Set Direction Backward
+      else {currentcommand = 5;} // Stop
+      if ((currentcommand != oldcommand) || (commandcounter > 30)){ // Limit commands to only send on new input or 3 second interval.
+          try{fetch(document.location.origin+'/control?var=car&val='+currentcommand);}catch(e){} // Send the command for controls. 
+          oldcommand = currentcommand;
+          commandcounter = 0;}
+      else {commandcounter++;} //Increment non-send command counter.
+      }, 100);    
 </script>
 
 </body>
