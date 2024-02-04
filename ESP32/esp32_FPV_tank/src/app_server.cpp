@@ -379,25 +379,19 @@ background: #006666;
   from {opacity: 0;}
   to {opacity: 1;}
 }
+
+#stream-container {
+  width: 100%;
+  height: 100%;
+}
+
+#stream {
+  width: 100%;
+  height: 100%;
+}
+
 </style>
 </head>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <body>
 
 <div class="tab">
@@ -406,38 +400,32 @@ background: #006666;
 </div>
 
 <div id="Viewer" class="tabcontent">
-<section id="mainViewer">
-            <figure>
-                <div id="stream-container" class="image-container">
-                    <img width="400px" height="400px" id="stream" src="" style="transform: rotate(270deg);">
-                </div>
-            </figure>
-
-        </section>
-
-
-
+  <section id="mainViewer">
+    <figure>
+      <div id="stream-container" class="image-container">
+        <img id="stream" src="" style="transform: rotate(270deg);">
+      </div>
+    </figure>
+  </section>
 </div>
 
-
-
 <div id="Settings" class="tabcontent">
-<section id="mainSettings">
-            <figure>
-            </figure>
-            <section id="buttons">
-                <table>
-                    <tr><td align="center">
-                    <tr><td align="center">Speed</td><td align="center" colspan="2"><input type="range" id="speed" min="0" max="8" value="8" onchange="try{fetch(document.location.origin+'/control?var=speed&val='+this.value);}catch(e){}"></td></tr>
-                    <tr><td align="center">Left Trim</td><td align="center" colspan="2"><input type="range" id="ltrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=ltrim&val='+this.value);}catch(e){}"></td></tr>
-                    <tr><td align="center">Right Trim</td><td align="center" colspan="2"><input type="range" id="rtrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=rtrim&val='+this.value);}catch(e){}"></td></tr>
-                    <tr><td align="center">Lights</td><td align="center" colspan="2"><input type="range" id="flash" min="0" max="255" value="0" onchange="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"></td></tr>
-                    <tr><td align="center">Quality</td><td align="center" colspan="2"><input type="range" id="quality" min="10" max="63" value="10" onchange="try{fetch(document.location.origin+'/control?var=quality&val='+this.value);}catch(e){}"></td></tr>
-                    <tr><td align="center">Resolution</td><td align="center" colspan="2"><input type="range" id="framesize" min="0" max="6" value="5" onchange="try{fetch(document.location.origin+'/control?var=framesize&val='+this.value);}catch(e){}"></td></tr>
-                    <tr><td align="center">Rotation</td><td align="center" colspan="2"><input type="button" value="Rotate Cam" id="rotate" onclick="rotateImg()"></td></tr>
-                </table>
-            </section>
-        </section>
+  <section id="mainSettings">
+    <figure>
+    </figure>
+    <section id="buttons">
+    <table>
+      <tr><td align="center">
+      <tr><td align="center">Speed</td><td align="center" colspan="2"><input type="range" id="speed" min="0" max="8" value="8" onchange="try{fetch(document.location.origin+'/control?var=speed&val='+this.value);}catch(e){}"></td></tr>
+      <tr><td align="center">Left Trim</td><td align="center" colspan="2"><input type="range" id="ltrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=ltrim&val='+this.value);}catch(e){}"></td></tr>
+      <tr><td align="center">Right Trim</td><td align="center" colspan="2"><input type="range" id="rtrim" min="-192" max="192" value="0" onchange="try{fetch(document.location.origin+'/control?var=rtrim&val='+this.value);}catch(e){}"></td></tr>
+      <tr><td align="center">Lights</td><td align="center" colspan="2"><input type="range" id="flash" min="0" max="255" value="0" onchange="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"></td></tr>
+      <tr><td align="center">Quality</td><td align="center" colspan="2"><input type="range" id="quality" min="10" max="63" value="10" onchange="try{fetch(document.location.origin+'/control?var=quality&val='+this.value);}catch(e){}"></td></tr>
+      <tr><td align="center">Resolution</td><td align="center" colspan="2"><input type="range" id="framesize" min="0" max="6" value="5" onchange="try{fetch(document.location.origin+'/control?var=framesize&val='+this.value);}catch(e){}"></td></tr>
+      <tr><td align="center">Rotation</td><td align="center" colspan="2"><input type="button" value="Rotate Cam" id="rotate" onclick="rotateImg()"></td></tr>
+    </table>
+    </section>
+  </section>
 </div>
 
 
@@ -459,21 +447,18 @@ function openCity(evt, cityName) {
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 
+// Adjust video container size to fill the screen
+function adjustVideoSize() {
+  var streamContainer = document.getElementById("stream-container");
+  streamContainer.style.width = window.innerWidth + "px";
+  streamContainer.style.height = window.innerHeight + "px";
+}
 
+// Call adjustVideoSize initially and on window resize
+window.onload = adjustVideoSize;
+window.onresize = adjustVideoSize;
 
-
-
-
-
-
-
-
-
-
-
-
-
-        // Functions to control streaming
+// Functions to control streaming and other functionality
 
             var source = document.getElementById('stream');
             source.src = document.location.origin+':81/stream';
@@ -527,10 +512,11 @@ document.getElementById("defaultOpen").click();
                     commandcounter = 0;}
                 else {commandcounter++;} //Increment non-send command counter.
                 }, 100);    
-        </script>
-   
+</script>
+
 </body>
-</html> 
+</html>
+
 
 )rawliteral";
 
