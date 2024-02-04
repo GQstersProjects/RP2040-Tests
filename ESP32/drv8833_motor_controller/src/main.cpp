@@ -29,10 +29,10 @@ void loop(void)
 
 for (int counter = 0; counter < 3; counter++) {
   motorController.setSpeedA(true, 255);  // Run motor A forward at full speed
-  motorController.setSpeedB(true, 255); // Run motor B backward at half speed
+  motorController.setSpeedB(true, 255); // Run motor B forward at half speed
   delay(1000); // Wait for 1 second
   
-  motorController.setSpeedA(false, 255);  // Run motor A forward at full speed
+  motorController.setSpeedA(false, 255);  // Run motor A backward at full speed
   motorController.setSpeedB(false, 255); // Run motor B backward at half speed
   delay(1000); // Wait for 1 second
 
