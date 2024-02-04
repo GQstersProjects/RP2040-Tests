@@ -49,19 +49,28 @@ int maxconnection = 1; // Only allow one at a time
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22
 
+
+// Define LED Pin
+#define LED_PIN 4
+
+
+#include "globals.h"
+
+//Define Motor Pins
+#define MOT_A1_PIN 1   // Motor A, Input 1   (IN4)
+#define MOT_A2_PIN 3   // Motor A, Input 2   (IN3)
+#define MOT_B1_PIN 12   // Motor B, Input 1   (IN2)
+#define MOT_B2_PIN 15   // Motor B, Input 2   (IN1)
+// extern MotorController_DRV8833 motorController;  // Create Motor Controller Object
+
+
+
+
+
+
+
 // Webserver / Controls Function
 void startCameraServer();
-
-//Define Servos
-const int ServoPinL = 12; // Left Servo assigned to GPIO 12
-const int ServoPinR = 13;  // Right Servo assigned to GPIO 13
-void initServo() // Here we setup PWM, and attach it to physical pins.
-{
-  ledcSetup(3, 50, 16); // 50 hz PWM, 16-bit resolution. Servo uses 1ms - 2ms pulse width as a fraction of 20ms period.
-  ledcSetup(4, 50, 16); // 50 hz PWM, 16-bit resolution. Pulse width is represented as integer fraction of 65536 ie 2ms = 6553.
-  ledcAttachPin(ServoPinL, 3); // Attach PWM 3 to GPIO 12
-  ledcAttachPin(ServoPinR, 4); // Attach PWM 4 to GPIO 13
-}
 
 void setup() 
 {
@@ -69,12 +78,12 @@ void setup()
   
   Serial.begin(115200);
   Serial.setDebugOutput(true);
+  
   Serial.println();
-
   Serial.println("Setting up the altoidTank!");
 
 
-// Camera Configuration - Again, don't touch.
+  // Camera Configuration - Again, don't touch.
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
@@ -96,6 +105,7 @@ void setup()
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
+
   //init with high specs to pre-allocate larger buffers
   if(psramFound()){
     config.frame_size = FRAMESIZE_QVGA;
@@ -106,12 +116,14 @@ void setup()
     config.jpeg_quality = 12;
     config.fb_count = 1;
   }
+
   // camera init
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
     Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
+
   //drop down frame size for higher initial frame rate
   sensor_t * s = esp_camera_sensor_get();
   s->set_framesize(s, FRAMESIZE_QVGA);
@@ -122,43 +134,48 @@ void setup()
   s->set_saturation(s, 1);     // -2 to 2
   s->set_gainceiling(s, (gainceiling_t)2);  // 0 to 6
 
+
+  // Initialize Motors & LEDs
+  motorController.makeMotorA(MOT_A1_PIN, MOT_A2_PIN);   // Connect motor A pin
+  motorController.makeMotorB(MOT_B1_PIN, MOT_B2_PIN);   // Connect motor B pin
+
+
   
-  // Initialize Servos & LEDs
-  initServo();
   ledcSetup(7, 5000, 8);
-  ledcAttachPin(4, 7);  //GPIO 4 is LED
+  ledcAttachPin(LED_PIN, 7);  //GPIO 4 is LED
   
- if(!ap){
-  // Connect to Router
-  Serial.println("ssid: " + (String)ssid);
-  Serial.println("password: " + (String)password);
-  Serial.println("WiFi is Client altoidTank");
-  WiFi.mode(WIFI_STA);
-  WiFi.setHostname(hostname);
-  WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+
+  // Connect to WiFi
+  if(!ap){
+    // Connect to Router
+    Serial.println("ssid: " + (String)ssid);
+    Serial.println("password: " + (String)password);
+    Serial.println("WiFi is Client altoidTank");
+    WiFi.mode(WIFI_STA);
+    WiFi.setHostname(hostname);
+    WiFi.begin(ssid, password);
+      while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
+    }
+    Serial.print("Camera Ready! Use 'http://");
+    Serial.print(WiFi.localIP());
+    Serial.println("' to connect");
+  } else {
+    // Setup Access Point
+    Serial.println("ssid: " + (String)ssid);
+    Serial.println("password: " + (String)password);
+    Serial.println("WiFi is Standalone altoidTank");
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP(ssid,password,channel,hidden,maxconnection);
+    Serial.print("Camera Ready! Use 'http://");
+    Serial.print(WiFi.softAPIP());
+    Serial.println("' to connect");
+    esp_wifi_set_bandwidth(WIFI_IF_AP, WIFI_BW_HT20); //Possible Fix for Interference??
   }
-  Serial.print("Camera Ready! Use 'http://");
-  Serial.print(WiFi.localIP());
-  Serial.println("' to connect");
- } else {
-  // Setup Access Point
-  Serial.println("ssid: " + (String)ssid);
-  Serial.println("password: " + (String)password);
-  Serial.println("WiFi is Standalone altoidTank");
-  WiFi.mode(WIFI_AP);
-  WiFi.softAP(ssid,password,channel,hidden,maxconnection);
-  Serial.print("Camera Ready! Use 'http://");
-  Serial.print(WiFi.softAPIP());
-  Serial.println("' to connect");
-  esp_wifi_set_bandwidth(WIFI_IF_AP, WIFI_BW_HT20); //Possible Fix for Interference??
-}
 
   //Flash LED as ready indicator
-  for (int i=0;i<5;i++) 
-    {
+  for (int i=0;i<5;i++) {
       ledcWrite(7,0);  // flash led
       delay(200);
       ledcWrite(7,10);

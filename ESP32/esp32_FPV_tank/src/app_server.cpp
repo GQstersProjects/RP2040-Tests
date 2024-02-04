@@ -1,3 +1,6 @@
+#include "globals.h"
+
+
 // Define Servo PWM Values & Stopped Variable
 // Yes I know servo libraries exist - Manual PWM allows the same code between servos and motor drivers.
 int endpoint = 32; // Multiplier for servo endpoints. Should be between 30 and 60 for modded servos, up to 180 for ESC.
@@ -16,6 +19,7 @@ int heartbeat = 0;
 #include "Arduino.h"
 //#include "dl_lib.h"  //1.0.2
 #include "dl_lib_matrix3d.h" //1.0.6         // this is gone and not being replaced... code is broken rn.
+
 
 // Stream Encoding
 typedef struct {
@@ -261,33 +265,43 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     else if(!strcmp(variable, "car")) {  
       if (val==1) {
         Serial.println("Forward");
-        actstate = fwd; // Set state to modify left & right behavior while moving.   
-        ledcWrite(3,lneutral+speed);  // GPIO pin 12 - Left Servo adds speed to neutral value
-        ledcWrite(4,rneutral-speed);  // GPIO pin 13 - Right Servo subtracts speed from neutral value
+        // actstate = fwd; // Set state to modify left & right behavior while moving.   
+        // ledcWrite(3,lneutral+speed);  // GPIO pin 12 - Left Servo adds speed to neutral value
+        // ledcWrite(4,rneutral-speed);  // GPIO pin 13 - Right Servo subtracts speed from neutral value
+        motorController.setSpeedA(true, 255);
+        motorController.setSpeedB(true, 255);
       }
       else if (val==2) {
         Serial.println("Backward");  
-        actstate = rev; // Set state to modify left & right behavior while moving.      
-        ledcWrite(3,lneutral-speed);  // GPIO pin 12 Left Servo
-        ledcWrite(4,rneutral+speed);  // GPIO pin 13 Right Servo        
+        // actstate = rev; // Set state to modify left & right behavior while moving.      
+        // ledcWrite(3,lneutral-speed);  // GPIO pin 12 Left Servo
+        // ledcWrite(4,rneutral+speed);  // GPIO pin 13 Right Servo  
+        motorController.setSpeedA(false, 255);
+        motorController.setSpeedB(false, 255);      
       }
       else if (val==3) {
         Serial.println("TurnLeft");
-        if      (actstate == fwd) { ledcWrite(3,lneutral+speed*.33); ledcWrite(4,rneutral-speed); }
-        else if (actstate == rev) { ledcWrite(3,lneutral-speed*.33); ledcWrite(4,rneutral+speed); }
-        else                      { ledcWrite(3,lneutral-speed*.75); ledcWrite(4,rneutral-speed*.75); }          
+        // if      (actstate == fwd) { ledcWrite(3,lneutral+speed*.33); ledcWrite(4,rneutral-speed); }
+        // else if (actstate == rev) { ledcWrite(3,lneutral-speed*.33); ledcWrite(4,rneutral+speed); }
+        // else                      { ledcWrite(3,lneutral-speed*.75); ledcWrite(4,rneutral-speed*.75); }          
+        motorController.setSpeedA(false, 255);
+        motorController.setSpeedB(true, 255);
       }
       else if (val==4) {
         Serial.println("TurnRight");
-        if      (actstate == fwd) { ledcWrite(3,lneutral+speed); ledcWrite(4,rneutral-speed*.33); }
-        else if (actstate == rev) { ledcWrite(3,lneutral-speed); ledcWrite(4,rneutral+speed*.33); }
-        else                      { ledcWrite(3,lneutral+speed*.75); ledcWrite(4,rneutral+speed*.75); }        
+        // if      (actstate == fwd) { ledcWrite(3,lneutral+speed); ledcWrite(4,rneutral-speed*.33); }
+        // else if (actstate == rev) { ledcWrite(3,lneutral-speed); ledcWrite(4,rneutral+speed*.33); }
+        // else                      { ledcWrite(3,lneutral+speed*.75); ledcWrite(4,rneutral+speed*.75); }        
+        motorController.setSpeedA(true, 255);
+        motorController.setSpeedB(false, 255);
       }
       else {
         Serial.println("Stop");
         actstate = stp;
-        ledcWrite(3,lneutral); // Send no pulse to disable servo (no drift).
-        ledcWrite(4,rneutral); // Send no pulse to disable servo (no drift).       
+        // ledcWrite(3,lneutral); // Send no pulse to disable servo (no drift).
+        // ledcWrite(4,rneutral); // Send no pulse to disable servo (no drift). 
+        motorController.setSpeedA(true, 0);
+        motorController.setSpeedB(true, 0);      
       } 
     }        
     else 
