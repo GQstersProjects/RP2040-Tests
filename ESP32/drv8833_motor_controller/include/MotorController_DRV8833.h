@@ -6,8 +6,8 @@ public:
   void makeMotorA(int pinA1, int pinA2) {
     this->pinA1 = pinA1;
     this->pinA2 = pinA2;
-    // pinMode(pinA1, OUTPUT);
-    // pinMode(pinA2, OUTPUT);
+    pinMode(pinA1, OUTPUT);
+    pinMode(pinA2, OUTPUT);
   }
   void makeMotorB(int pinB1, int pinB2) {
     this->pinB1 = pinB1;
